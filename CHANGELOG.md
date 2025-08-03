@@ -12,3 +12,6 @@
 ### Changed
 
 -   The project can now be run as either a web server or an MCP server.
+-   Updated documentation to focus on the MCP server implementation.
+-   Moved the primary `README.md` to the `.github` directory.
+-   Deleted the root `README.md` to avoid confusion.
