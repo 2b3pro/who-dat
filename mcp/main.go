@@ -3,8 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"log"
-	"os"
 
 	"github.com/lissy93/who-dat/lib"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
@@ -41,8 +39,8 @@ func main() {
 		Description: "Get WHOIS information for a domain",
 	}, GetWhoisTool)
 
-	t := mcp.NewLoggingTransport(mcp.NewStdioTransport(), os.Stderr)
-	if err := server.Run(context.Background(), t); err != nil {
-		log.Printf("Server failed: %v", err)
+	if err := server.Run(context.Background(), mcp.NewStdioTransport()); err != nil {
+		// Log messages are omitted when using stdio transport to prevent interference with protocol messages.
+		// Any errors will be communicated via the MCP protocol itself.
 	}
 }
