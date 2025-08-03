@@ -13,7 +13,7 @@
   <summary>Contents</summary>
   
 - [About this Fork](#about-this-fork)
-- [MCP Server Usage](#mcp-server-usage)
+- [MCP Server Usage](#who-dat-mcp-usage)
   - [Building the Server](#building-the-server)
   - [Running the Server](#running-the-server)
   - [Implementation in Cline, Cursor, and Claude Apps](#implementation-in-cline-cursor-and-claude-apps)
@@ -34,17 +34,17 @@ This is a fork of the original [Who-Dat](https://github.com/Lissy93/who-dat) pro
 To build the MCP server, run the following command from the root of the project directory:
 
 ```bash
-go build -o build/mcp-server mcp/main.go
+go build -o build/who-dat-mcp mcp/main.go
 ```
 
-This will create an executable file at `build/mcp-server`.
+This will create an executable file at `build/who-dat-mcp`.
 
 ### Running the Server
 
 You can run the server directly from your terminal:
 
 ```bash
-./build/mcp-server
+./build/who-dat-mcp
 ```
 
 When run, the server will listen for requests on standard input and send responses to standard output, as per the MCP specification for stdio transport.
@@ -62,7 +62,7 @@ Here is an example configuration for adding the `who-dat-mcp` server. You will n
   "mcpServers": {
     "who-dat-mcp": {
       "type": "stdio",
-      "command": "/path/to/who-dat-mcp/build/mcp-server",
+      "command": "/path/to/who-dat-mcp/build/who-dat-mcp",
       "args": [],
       "disabled": false,
       "autoApprove": []
@@ -77,7 +77,7 @@ Here is an example configuration for adding the `who-dat-mcp` server. You will n
 *   **Cursor:** Add the above JSON object to your MCP configuration within Cursor's settings.
 *   **Claude Apps:** If you are using a Claude-compatible application that supports MCP, add the server configuration to the appropriate settings file.
 
-Once configured, your AI assistant will be able to use the `get_whois` tool provided by this server.
+Once configured, your AI assistant will be able to use the `get_whois` and `get_whois_multi` tools provided by this server.
 
 ---
 

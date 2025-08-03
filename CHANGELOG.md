@@ -4,6 +4,7 @@
 
 ### Added
 
+-   `get_whois_multi` tool for performing WHOIS lookups for multiple domains.
 -   MCP server implementation (`mcp/main.go`)
 -   `get_whois` tool for performing WHOIS lookups
 -   `README.md` for the MCP server

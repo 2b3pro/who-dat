@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: 'https://who-dat.as93.net/'
+  - url: "https://who-dat.as93.net/"
 
 paths:
   /{domain}:
@@ -20,13 +20,13 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: WHOIS data for the specified domain.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WhoisInfo'
-        '400':
+                $ref: "#/components/schemas/WhoisInfo"
+        "400":
           description: Bad request, e.g., domain not specified.
           content:
             application/json:
@@ -35,7 +35,7 @@ paths:
                 properties:
                   error:
                     type: string
-        '404':
+        "404":
           description: Domain not found.
           content:
             application/json:
@@ -48,7 +48,7 @@ paths:
   /multi:
     get:
       summary: Multiple Domain WHOIS Lookup
-      description: Retrieve WHOIS information for multiple domains.
+      description: Retrieve WHOIS information for multiple domains, returning a map of domain names to WHOIS data or error messages.
       parameters:
         - name: domains
           in: query
@@ -57,15 +57,20 @@ paths:
           schema:
             type: string
       responses:
-        '200':
-          description: Array of WHOIS data for the specified domains.
+        "200":
+          description: A map of domain names to their WHOIS data or error messages.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/WhoisInfo'
-        '400':
+                type: object
+                additionalProperties:
+                  oneOf:
+                    - $ref: "#/components/schemas/WhoisInfo"
+                    - type: object
+                      properties:
+                        error:
+                          type: string
+        "400":
           description: Bad request, e.g., no domains specified.
           content:
             application/json:
@@ -74,7 +79,7 @@ paths:
                 properties:
                   error:
                     type: string
-        '500':
+        "500":
           description: Internal server error.
           content:
             application/json:
@@ -120,15 +125,15 @@ components:
               type: string
               format: date-time
         registrar:
-          $ref: '#/components/schemas/ContactInfo'
+          $ref: "#/components/schemas/ContactInfo"
         registrant:
-          $ref: '#/components/schemas/ContactInfo'
+          $ref: "#/components/schemas/ContactInfo"
         administrative:
-          $ref: '#/components/schemas/ContactInfo'
+          $ref: "#/components/schemas/ContactInfo"
         technical:
-          $ref: '#/components/schemas/ContactInfo'
+          $ref: "#/components/schemas/ContactInfo"
         billing:
-          $ref: '#/components/schemas/ContactInfo'
+          $ref: "#/components/schemas/ContactInfo"
 
     ContactInfo:
       type: object

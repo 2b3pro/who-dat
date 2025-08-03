@@ -9,18 +9,24 @@ import (
 )
 
 // WhoisArgs defines the arguments for the get_whois tool.
-type WhoisArgs struct {
-	Domain string `json:"domain" mcp:"the domain to lookup"`
+// WhoisMultiArgs defines the arguments for the get_whois_multi tool.
+type WhoisMultiArgs struct {
+	Domains []string `json:"domains" mcp:"the list of domains to lookup"`
 }
 
-// GetWhoisTool is the handler for the get_whois tool.
-func GetWhoisTool(ctx context.Context, ss *mcp.ServerSession, params *mcp.CallToolParamsFor[WhoisArgs]) (*mcp.CallToolResultFor[json.RawMessage], error) {
-	whoisInfo, err := lib.GetWhois(params.Arguments.Domain)
-	if err != nil {
-		return nil, err
+// GetWhoisMultiTool is the handler for the get_whois_multi tool.
+func GetWhoisMultiTool(ctx context.Context, ss *mcp.ServerSession, params *mcp.CallToolParamsFor[WhoisMultiArgs]) (*mcp.CallToolResultFor[json.RawMessage], error) {
+	results := make(map[string]interface{})
+	for _, domain := range params.Arguments.Domains {
+		whoisInfo, err := lib.GetWhois(domain)
+		if err != nil {
+			results[domain] = map[string]string{"error": err.Error()}
+		} else {
+			results[domain] = whoisInfo
+		}
 	}
 
-	resultJSON, err := json.Marshal(whoisInfo)
+	resultJSON, err := json.Marshal(results)
 	if err != nil {
 		return nil, err
 	}
@@ -35,9 +41,9 @@ func GetWhoisTool(ctx context.Context, ss *mcp.ServerSession, params *mcp.CallTo
 func main() {
 	server := mcp.NewServer(&mcp.Implementation{Name: "who-dat"}, nil)
 	mcp.AddTool(server, &mcp.Tool{
-		Name:        "get_whois",
-		Description: "Get WHOIS information for a domain",
-	}, GetWhoisTool)
+		Name:        "get_whois_multi",
+		Description: "Get WHOIS information for a list of domains",
+	}, GetWhoisMultiTool)
 
 	if err := server.Run(context.Background(), mcp.NewStdioTransport()); err != nil {
 		// Log messages are omitted when using stdio transport to prevent interference with protocol messages.
